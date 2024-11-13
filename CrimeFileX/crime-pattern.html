@@ -1,0 +1,306 @@
+<section id="crime-pattern">
+    <link rel="stylesheet" href="crime-pattern.css">
+    <h2>Crime Pattern Analysis</h2>
+    
+    <div class="intro">
+        <p>Explore crime trends, identify hotspots, and visualize the patterns of criminal activities across various regions. Using advanced algorithms and AI analytics, CrimeFileX provides insights into the crime landscape.</p>
+    </div>
+    
+    <div class="crime-dashboard">
+        <section id="trend-analysis">
+            <h2>Trend Analysis</h2>
+            <p>Our algorithm analyzes crime data to identify rising crime rates and shifting trends over time. This helps in proactive law enforcement and resource allocation.</p>
+            
+            <!-- Chart Container -->
+            <div class="chart-container">
+                <canvas id="crimeTrendChart"></canvas>
+            </div>
+        </section>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('crimeTrendChart').getContext('2d');
+    const crimeTrendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [{
+                label: 'Crime Rate',
+                data: [45, 50, 60, 55, 70, 65, 75, 80, 70, 60, 50, 55],
+                backgroundColor: 'rgba(41, 128, 185, 0.2)',
+                borderColor: 'rgba(41, 128, 185, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(41, 128, 185, 1)',
+                pointBorderColor: '#fff',
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: '#3498db',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Crime Rate'
+                    },
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        stepSize: 10
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+        
+        <div class="hotspot-map">
+            <section id="crime-hotspots">
+                <h2>Crime Hotspots Map</h2>
+                <p>Visualize crime hotspots in different areas. Hover over each area for detailed crime statistics.</p>
+                <!-- Map Container -->
+                <div id="map"></div>
+            </section>
+            
+        </div>
+    </div>
+    <script>
+        // Initialize the map
+        const map = L.map('map').setView([40.730610, -73.935242], 12); // Centered on New York City
+    
+        // Add Mapbox tiles
+        L.tileLayer(`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_ACCESS_TOKEN`, {
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'YOUR_MAPBOX_ACCESS_TOKEN'
+        }).addTo(map);
+    
+        // Sample crime hotspot data
+        const hotspots = [
+            {
+                location: [40.730610, -73.935242],
+                area: 'East Village',
+                crimes: 35,
+                details: 'Mainly property crimes and theft cases.',
+                violentCrimes: 12,
+                propertyCrimes: 23
+            },
+            {
+                location: [40.712776, -74.005974],
+                area: 'Lower Manhattan',
+                crimes: 52,
+                details: 'High incidence of theft and assault cases.',
+                violentCrimes: 20,
+                propertyCrimes: 32
+            },
+            {
+                location: [40.678178, -73.944158],
+                area: 'Brooklyn',
+                crimes: 42,
+                details: 'Reports of burglaries and car thefts.',
+                violentCrimes: 15,
+                propertyCrimes: 27
+            }
+        ];
+    
+        // Add each hotspot to the map with a circle marker
+        hotspots.forEach(hotspot => {
+            const marker = L.circle(hotspot.location, {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 500
+            }).addTo(map);
+    
+            // Tooltip with brief stats
+            marker.bindTooltip(`<strong>${hotspot.area}</strong><br>Total Crimes: ${hotspot.crimes}`)
+                .openTooltip();
+    
+            // Popup with detailed crime statistics
+            marker.bindPopup(`
+                <strong>Area:</strong> ${hotspot.area}<br>
+                <strong>Total Crimes:</strong> ${hotspot.crimes}<br>
+                <strong>Violent Crimes:</strong> ${hotspot.violentCrimes}<br>
+                <strong>Property Crimes:</strong> ${hotspot.propertyCrimes}<br>
+                <em>${hotspot.details}</em>
+            `);
+        });
+    </script>
+    
+
+    <div class="ai-insights">
+        <section id="ai-insights">
+            <h2>AI-Driven Insights</h2>
+            <p>Our AI system evaluates data patterns to predict potential crime occurrences, assisting in more effective policing and strategic planning.</p>
+            
+            <div class="prediction-summary">
+                <h3>Prediction: Likely High-Risk Areas</h3>
+                <p>This week's predictions indicate an increase in criminal activity in certain regions. Based on historical data, these areas are identified as at risk for rising criminal events.</p>
+                <button id="view-predictions-btn">View Predictions</button>
+            </div>
+        
+            <!-- Prediction results container -->
+            <div id="prediction-results" class="prediction-results hidden">
+                <h4>High-Risk Area Predictions</h4>
+                <ul id="prediction-list"></ul>
+            </div>
+        </section>
+    </div>
+    <script>
+        // Sample prediction data (mocked for demonstration)
+        const predictions = [
+            { area: "Downtown District", riskLevel: "High", anticipatedEvents: 12 },
+            { area: "West End", riskLevel: "Moderate", anticipatedEvents: 8 },
+            { area: "Riverfront Park", riskLevel: "High", anticipatedEvents: 10 },
+            { area: "Old Town", riskLevel: "Moderate", anticipatedEvents: 6 },
+            { area: "Eastside", riskLevel: "Low", anticipatedEvents: 3 },
+        ];
+    
+        // Function to display predictions
+        function displayPredictions() {
+            const predictionList = document.getElementById("prediction-list");
+            predictionList.innerHTML = ""; // Clear existing predictions
+    
+            predictions.forEach(prediction => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+                    <strong>Area:</strong> ${prediction.area}<br>
+                    <strong>Risk Level:</strong> ${prediction.riskLevel}<br>
+                    <strong>Predicted Events:</strong> ${prediction.anticipatedEvents}
+                `;
+                predictionList.appendChild(listItem);
+            });
+    
+            // Show the predictions container
+            document.getElementById("prediction-results").classList.remove("hidden");
+        }
+    
+        // Event listener for the "View Predictions" button
+        document.getElementById("view-predictions-btn").addEventListener("click", displayPredictions);
+    </script>
+    
+
+    <div class="crime-analytics">
+        <h3>Detailed Crime Analytics</h3>
+        <p>Get an in-depth look at specific crime types and their frequency in various neighborhoods. Our analytics provide a detailed breakdown of various crimes like theft, assault, and vandalism.</p>
+        <ul>
+            <li><strong>Theft:</strong> 25% increase in urban areas over the past month.</li>
+            <li><strong>Assault:</strong> 15% decrease in the suburban regions.</li>
+            <li><strong>Vandalism:</strong> 10% rise observed in public spaces.</li>
+        </ul>
+    </div>
+
+    <div class="data-visualization">
+        <section id="crime-data-visualization">
+            <h2>Visualize Crime Data</h2>
+            <p>Choose a data category below to see detailed visual representations of crime distribution and frequency:</p>
+            
+            <!-- Crime Category Selection -->
+            <div class="data-category">
+                <label>
+                    <input type="radio" name="crime-category" value="Theft" checked>
+                    Theft
+                </label>
+                <label>
+                    <input type="radio" name="crime-category" value="Assault">
+                    Assault
+                </label>
+                <label>
+                    <input type="radio" name="crime-category" value="Burglary">
+                    Burglary
+                </label>
+                <label>
+                    <input type="radio" name="crime-category" value="Vandalism">
+                    Vandalism
+                </label>
+            </div>
+        
+            <!-- Visualization Button -->
+            <button id="visualize-btn">Visualize</button>
+        
+            <!-- Visualization Container -->
+            <div id="visualization-output" class="hidden">
+                <h3 id="visualization-title"></h3>
+                <canvas id="crime-chart"></canvas> <!-- Placeholder for visualization (chart) -->
+            </div>
+        </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Mock data for each crime category
+    const crimeData = {
+        "Theft": [30, 45, 25, 50, 60],
+        "Assault": [20, 30, 15, 35, 40],
+        "Burglary": [25, 35, 20, 40, 45],
+        "Vandalism": [10, 15, 10, 20, 25]
+    };
+    const months = ["Jan", "Feb", "Mar", "Apr", "May"];
+
+    // Function to visualize data
+    function visualizeData() {
+        const selectedCategory = document.querySelector('input[name="crime-category"]:checked').value;
+        const chartData = crimeData[selectedCategory];
+
+        // Update title
+        document.getElementById("visualization-title").innerText = `${selectedCategory} Crime Data`;
+
+        // Show the visualization container
+        document.getElementById("visualization-output").classList.remove("hidden");
+
+        // Destroy previous chart if it exists
+        if (window.crimeChart) window.crimeChart.destroy();
+
+        // Create new chart
+        const ctx = document.getElementById("crime-chart").getContext("2d");
+        window.crimeChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: months,
+                datasets: [{
+                    label: selectedCategory,
+                    data: chartData,
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Event listener for the "Visualize" button
+    document.getElementById("visualize-btn").addEventListener("click", visualizeData);
+</script>
+
+
+</section>

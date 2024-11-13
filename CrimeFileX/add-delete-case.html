@@ -1,0 +1,51 @@
+<section id="add-delete-case">
+    <link rel="stylesheet" href="add-delete-case.css">
+
+    <h2>Manage Criminal Cases</h2>
+    <div class="case-management-container">
+        
+        <!-- Add Case Form -->
+        <div class="case-form">
+            <h3>Add New Case</h3>
+            <form action="/add-case" method="POST">
+                <label for="case-number">Case Number</label>
+                <input type="text" id="case-number" name="case_number" required>
+
+                <label for="offender-name">Offender's Name</label>
+                <input type="text" id="offender-name" name="offender_name" required>
+
+                <label for="case-description">Case Description</label>
+                <textarea id="case-description" name="case_description" rows="4" required></textarea>
+
+                <label for="crime-type">Crime Type</label>
+                <select id="crime-type" name="crime_type" required>
+                    <option value="theft">Theft</option>
+                    <option value="assault">Assault</option>
+                    <option value="homicide">Homicide</option>
+                    <option value="fraud">Fraud</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="case-date">Case Date</label>
+                <input type="date" id="case-date" name="case_date" required>
+
+                <button type="submit">Add Case</button>
+            </form>
+        </div>
+
+        <!-- Delete Case Form -->
+        <div class="case-form">
+            <h3>Delete Resolved Case</h3>
+            <form action="/delete-case" method="POST">
+                <label for="delete-case-number">Case Number</label>
+                <input type="text" id="delete-case-number" name="case_number" required>
+
+                <label for="delete-reason">Reason for Deletion</label>
+                <textarea id="delete-reason" name="delete_reason" rows="4" required></textarea>
+
+                <button type="submit">Delete Case</button>
+            </form>
+        </div>
+        <script src="script2.js"></script>
+    </div>
+</section>
